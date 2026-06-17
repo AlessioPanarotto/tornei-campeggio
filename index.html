@@ -76,7 +76,7 @@ th{background:#f9f8f5;position:sticky;top:0;z-index:1;font-size:13px}
       <div id="ssections"></div>
     </div>
   </div>
-  <span class="sync-badge sync-loading" id="syncBadge">⏳ connessione...</span>
+  <span class="sync-badge sync-loading" id="syncBadge">&#x23F3; connessione...</span>
 </header>
 
 <main class="layout">
@@ -115,23 +115,23 @@ th{background:#f9f8f5;position:sticky;top:0;z-index:1;font-size:13px}
   </div>
 </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteField, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
+<!-- Firebase Realtime Database SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+var firebaseConfig = {
   apiKey: "AIzaSyAvhy9J-LRtkvmVRFwVmXWehCFcWL7Z-uU",
   authDomain: "tornei-campeggio-dd04f.firebaseapp.com",
+  databaseURL: "https://tornei-campeggio-dd04f-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "tornei-campeggio-dd04f",
   storageBucket: "tornei-campeggio-dd04f.firebasestorage.app",
   messagingSenderId: "166778767014",
   appId: "1:166778767014:web:cd52ba9d1ebad020705667"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const DOC_REF = doc(db, "tornei", "risultati");
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var dbRef = db.ref("risultati");
 
 var MATCHES = [{"turno": 1, "sport": "palla base", "home": "rosa", "away": "arancio"}, {"turno": 1, "sport": "pallavolo", "home": "azzurro", "away": "blu"}, {"turno": 1, "sport": "guerra mondiale", "home": "verde", "away": "giallo"}, {"turno": 1, "sport": "calcio", "home": "rosso", "away": "viola"}, {"turno": 2, "sport": "palla base", "home": "verde", "away": "viola"}, {"turno": 2, "sport": "pallavolo", "home": "rosso", "away": "giallo"}, {"turno": 2, "sport": "guerra mondiale", "home": "azzurro", "away": "arancio"}, {"turno": 2, "sport": "calcio", "home": "rosa", "away": "blu"}, {"turno": 3, "sport": "palla base", "home": "rosso", "away": "blu"}, {"turno": 3, "sport": "pallavolo", "home": "rosa", "away": "viola"}, {"turno": 3, "sport": "guerra mondiale", "home": "arancio", "away": "giallo"}, {"turno": 3, "sport": "calcio", "home": "verde", "away": "azzurro"}, {"turno": 4, "sport": "palla base", "home": "arancio", "away": "viola"}, {"turno": 4, "sport": "pallavolo", "home": "verde", "away": "blu"}, {"turno": 4, "sport": "guerra mondiale", "home": "rosa", "away": "rosso"}, {"turno": 4, "sport": "calcio", "home": "azzurro", "away": "giallo"}, {"turno": 5, "sport": "palla base", "home": "azzurro", "away": "giallo"}, {"turno": 5, "sport": "pallavolo", "home": "arancio", "away": "rosso"}, {"turno": 5, "sport": "guerra mondiale", "home": "blu", "away": "viola"}, {"turno": 5, "sport": "calcio", "home": "rosa", "away": "verde"}, {"turno": 6, "sport": "palla base", "home": "rosa", "away": "blu"}, {"turno": 6, "sport": "pallavolo", "home": "azzurro", "away": "viola"}, {"turno": 6, "sport": "guerra mondiale", "home": "arancio", "away": "verde"}, {"turno": 6, "sport": "calcio", "home": "rosso", "away": "giallo"}, {"turno": 7, "sport": "palla base", "home": "verde", "away": "giallo"}, {"turno": 7, "sport": "pallavolo", "home": "rosa", "away": "rosso"}, {"turno": 7, "sport": "guerra mondiale", "home": "azzurro", "away": "blu"}, {"turno": 7, "sport": "calcio", "home": "arancio", "away": "viola"}, {"turno": 8, "sport": "palla base", "home": "arancio", "away": "blu"}, {"turno": 8, "sport": "pallavolo", "home": "verde", "away": "viola"}, {"turno": 8, "sport": "guerra mondiale", "home": "rosa", "away": "giallo"}, {"turno": 8, "sport": "calcio", "home": "azzurro", "away": "rosso"}, {"turno": 9, "sport": "palla base", "home": "azzurro", "away": "viola"}, {"turno": 9, "sport": "pallavolo", "home": "arancio", "away": "giallo"}, {"turno": 9, "sport": "guerra mondiale", "home": "verde", "away": "rosso"}, {"turno": 9, "sport": "calcio", "home": "rosa", "away": "blu"}, {"turno": 10, "sport": "palla base", "home": "rosa", "away": "verde"}, {"turno": 10, "sport": "pallavolo", "home": "azzurro", "away": "rosso"}, {"turno": 10, "sport": "guerra mondiale", "home": "arancio", "away": "blu"}, {"turno": 10, "sport": "calcio", "home": "giallo", "away": "viola"}, {"turno": 11, "sport": "palla base", "home": "arancio", "away": "rosso"}, {"turno": 11, "sport": "pallavolo", "home": "verde", "away": "giallo"}, {"turno": 11, "sport": "guerra mondiale", "home": "rosa", "away": "azzurro"}, {"turno": 11, "sport": "calcio", "home": "blu", "away": "viola"}, {"turno": 12, "sport": "palla base", "home": "blu", "away": "giallo"}, {"turno": 12, "sport": "pallavolo", "home": "rosa", "away": "arancio"}, {"turno": 12, "sport": "guerra mondiale", "home": "verde", "away": "viola"}, {"turno": 12, "sport": "calcio", "home": "azzurro", "away": "rosso"}, {"turno": 13, "sport": "palla base", "home": "rosa", "away": "viola"}, {"turno": 13, "sport": "pallavolo", "home": "blu", "away": "rosso"}, {"turno": 13, "sport": "guerra mondiale", "home": "arancio", "away": "azzurro"}, {"turno": 13, "sport": "calcio", "home": "verde", "away": "giallo"}, {"turno": 14, "sport": "palla base", "home": "verde", "away": "rosso"}, {"turno": 14, "sport": "pallavolo", "home": "rosa", "away": "giallo"}, {"turno": 14, "sport": "guerra mondiale", "home": "blu", "away": "arancio"}, {"turno": 14, "sport": "calcio", "home": "azzurro", "away": "viola"}, {"turno": 15, "sport": "palla base", "home": "azzurro", "away": "arancio"}, {"turno": 15, "sport": "pallavolo", "home": "verde", "away": "rosso"}, {"turno": 15, "sport": "guerra mondiale", "home": "rosa", "away": "viola"}, {"turno": 15, "sport": "calcio", "home": "blu", "away": "giallo"}, {"turno": 16, "sport": "palla base", "home": "giallo", "away": "viola"}, {"turno": 16, "sport": "pallavolo", "home": "azzurro", "away": "arancio"}, {"turno": 16, "sport": "guerra mondiale", "home": "blu", "away": "rosso"}, {"turno": 16, "sport": "calcio", "home": "rosa", "away": "verde"}, {"turno": 17, "sport": "palla base", "home": "arancio", "away": "giallo"}, {"turno": 17, "sport": "pallavolo", "home": "blu", "away": "viola"}, {"turno": 17, "sport": "guerra mondiale", "home": "rosa", "away": "verde"}, {"turno": 17, "sport": "calcio", "home": "azzurro", "away": "rosso"}, {"turno": 18, "sport": "palla base", "home": "rosa", "away": "rosso"}, {"turno": 18, "sport": "pallavolo", "home": "arancio", "away": "verde"}, {"turno": 18, "sport": "guerra mondiale", "home": "azzurro", "away": "viola"}, {"turno": 18, "sport": "calcio", "home": "blu", "away": "giallo"}, {"turno": 19, "sport": "palla base", "home": "blu", "away": "viola"}, {"turno": 19, "sport": "pallavolo", "home": "rosa", "away": "azzurro"}, {"turno": 19, "sport": "guerra mondiale", "home": "arancio", "away": "rosso"}, {"turno": 19, "sport": "calcio", "home": "verde", "away": "giallo"}, {"turno": 20, "sport": "palla base", "home": "verde", "away": "azzurro"}, {"turno": 20, "sport": "pallavolo", "home": "blu", "away": "giallo"}, {"turno": 20, "sport": "guerra mondiale", "home": "rosa", "away": "arancio"}, {"turno": 20, "sport": "calcio", "home": "rosso", "away": "viola"}, {"turno": 21, "sport": "palla base", "home": "arancio", "away": "blu"}, {"turno": 21, "sport": "pallavolo", "home": "verde", "away": "azzurro"}, {"turno": 21, "sport": "guerra mondiale", "home": "giallo", "away": "viola"}, {"turno": 21, "sport": "calcio", "home": "rosa", "away": "rosso"}, {"turno": 22, "sport": "palla base", "home": "rosa", "away": "giallo"}, {"turno": 22, "sport": "pallavolo", "home": "arancio", "away": "viola"}, {"turno": 22, "sport": "guerra mondiale", "home": "verde", "away": "blu"}, {"turno": 22, "sport": "calcio", "home": "azzurro", "away": "giallo"}, {"turno": 23, "sport": "palla base", "home": "azzurro", "away": "rosso"}, {"turno": 23, "sport": "pallavolo", "home": "rosa", "away": "verde"}, {"turno": 23, "sport": "guerra mondiale", "home": "arancio", "away": "viola"}, {"turno": 23, "sport": "calcio", "home": "blu", "away": "rosso"}, {"turno": 24, "sport": "palla base", "home": "verde", "away": "blu"}, {"turno": 24, "sport": "pallavolo", "home": "azzurro", "away": "giallo"}, {"turno": 24, "sport": "guerra mondiale", "home": "rosa", "away": "arancio"}, {"turno": 24, "sport": "calcio", "home": "rosso", "away": "viola"}, {"turno": 25, "sport": "palla base", "home": "rosso", "away": "viola"}, {"turno": 25, "sport": "pallavolo", "home": "verde", "away": "arancio"}, {"turno": 25, "sport": "guerra mondiale", "home": "blu", "away": "giallo"}, {"turno": 25, "sport": "calcio", "home": "rosa", "away": "azzurro"}, {"turno": 26, "sport": "palla base", "home": "arancio", "away": "verde"}, {"turno": 26, "sport": "pallavolo", "home": "rosso", "away": "blu"}, {"turno": 26, "sport": "guerra mondiale", "home": "rosa", "away": "giallo"}, {"turno": 26, "sport": "calcio", "home": "azzurro", "away": "viola"}, {"turno": 27, "sport": "palla base", "home": "blu", "away": "rosso"}, {"turno": 27, "sport": "pallavolo", "home": "rosa", "away": "viola"}, {"turno": 27, "sport": "guerra mondiale", "home": "arancio", "away": "azzurro"}, {"turno": 27, "sport": "calcio", "home": "verde", "away": "giallo"}, {"turno": 28, "sport": "palla base", "home": "rosa", "away": "azzurro"}, {"turno": 28, "sport": "pallavolo", "home": "arancio", "away": "blu"}, {"turno": 28, "sport": "guerra mondiale", "home": "verde", "away": "rosso"}, {"turno": 28, "sport": "calcio", "home": "giallo", "away": "viola"}];
 var SPORTS = ['palla base','pallavolo','guerra mondiale','calcio'];
@@ -144,18 +144,14 @@ var results = {};
 function setSyncBadge(state){
   var b=document.getElementById('syncBadge');
   b.className='sync-badge';
-  if(state==='ok'){b.className+=' sync-ok';b.textContent='✓ sincronizzato';}
-  else if(state==='err'){b.className+=' sync-err';b.textContent='✗ errore connessione';}
-  else{b.className+=' sync-loading';b.textContent='⏳ connessione...';}
+  if(state==='ok'){b.className+=' sync-ok';b.textContent='\u2713 sincronizzato';}
+  else if(state==='err'){b.className+=' sync-err';b.textContent='\u2717 errore connessione';}
+  else{b.className+=' sync-loading';b.textContent='\u23f3 connessione...';}
 }
 
-// Ascolta i cambiamenti in tempo reale da Firestore
-onSnapshot(DOC_REF, function(snap){
-  if(snap.exists()){
-    results = snap.data();
-  } else {
-    results = {};
-  }
+// Ascolta i cambiamenti in tempo reale
+dbRef.on('value', function(snap){
+  results = snap.val() || {};
   setSyncBadge('ok');
   renderCal();
   renderStandings();
@@ -164,31 +160,15 @@ onSnapshot(DOC_REF, function(snap){
   console.error(err);
 });
 
-async function saveResult(key, value){
-  try{
-    var update = {};
-    update[key] = value;
-    await setDoc(DOC_REF, update, {merge: true});
-    setSyncBadge('ok');
-  }catch(e){
-    setSyncBadge('err');
-    console.error(e);
-  }
+function saveResult(key, value){
+  dbRef.child(key).set(value).catch(function(e){ setSyncBadge('err'); console.error(e); });
 }
 
-async function deleteResult(key){
-  try{
-    var update = {};
-    update[key] = deleteField();
-    await updateDoc(DOC_REF, update);
-    setSyncBadge('ok');
-  }catch(e){
-    setSyncBadge('err');
-    console.error(e);
-  }
+function deleteResult(key){
+  dbRef.child(key).remove().catch(function(e){ setSyncBadge('err'); console.error(e); });
 }
 
-function keyFor(m){ return m.turno+'|'+m.sport+'|'+m.home+'|'+m.away; }
+function keyFor(m){ return m.turno+'_'+m.sport.replace(/ /g,'_')+'_'+m.home+'_'+m.away; }
 function ct(t){ return '<span class="t-'+t+'">'+t+'</span>'; }
 function ge(id){ return document.getElementById(id); }
 
@@ -272,7 +252,7 @@ function renderCal(){
     for(var s=0;s<SPORTS.length;s++){
       var sport=SPORTS[s];
       var m=grouped[turno][sport];
-      if(!m){row+='<td>—</td>';continue;}
+      if(!m){row+='<td>\u2014</td>';continue;}
       var k=keyFor(m),r=results[k];
       var score='<span style="font-size:12px;color:#6f6d67">Clicca per inserire</span>';
       var sets='';
@@ -284,7 +264,7 @@ function renderCal(){
         }
       }
       row+='<td><div class="cm"><div class="cm-sport">'+sport+'</div>';
-      row+='<button class="cm-btn" onclick="openDialog(\''+k+'\')">'+ ct(m.home)+' - '+ct(m.away)+'<br>'+score+'</button>';
+      row+='<button class="cm-btn" onclick="openDialog(\''+k+'\')">'+ct(m.home)+' - '+ct(m.away)+'<br>'+score+'</button>';
       row+=sets+'</div></td>';
     }
     row+='</tr>';
@@ -293,10 +273,10 @@ function renderCal(){
 }
 
 var NOTES={
-  'palla base':'Parità: scontri diretti → diff. punti → punti subiti → fatti.',
-  'pallavolo':'Parità: scontri diretti → diff. punti (somma set) → subiti → fatti. Pareggio non ammesso.',
-  'guerra mondiale':'Parità: scontri diretti. Pareggio non ammesso.',
-  'calcio':'Parità: scontri diretti → diff. reti → gol subiti → fatti.'
+  'palla base':'Parit\u00e0: scontri diretti \u2192 diff. punti \u2192 punti subiti \u2192 fatti.',
+  'pallavolo':'Parit\u00e0: scontri diretti \u2192 diff. punti (somma set) \u2192 subiti \u2192 fatti. Pareggio non ammesso.',
+  'guerra mondiale':'Parit\u00e0: scontri diretti. Pareggio non ammesso.',
+  'calcio':'Parit\u00e0: scontri diretti \u2192 diff. reti \u2192 gol subiti \u2192 fatti.'
 };
 function renderStandings(){
   var stabs=ge('stabs'),secs=ge('ssections');
@@ -311,7 +291,7 @@ function renderStandings(){
     var rows='';
     for(var r=0;r<sorted.length;r++){
       var x=sorted[r];
-      rows+='<tr class="'+(x.pos<=3?'rank-'+x.pos:'')+'""><td>'+x.pos+'</td><td>'+ct(x.team)+'</td><td>'+x.g+'</td><td>'+x.v+'</td>';
+      rows+='<tr class="'+(x.pos<=3?'rank-'+x.pos:'')+'"><td>'+x.pos+'</td><td>'+ct(x.team)+'</td><td>'+x.g+'</td><td>'+x.v+'</td>';
       if(!isGM) rows+='<td>'+x.n+'</td>';
       rows+='<td>'+x.p+'</td>';
       if(!isGM) rows+='<td>'+x.fp+'</td><td>'+x.sp+'</td><td>'+x.diff+'</td>';
@@ -331,15 +311,17 @@ function switchSport(e,s){
 
 window.openDialog = function(key){
   editingKey=key;
-  var m=null;for(var i=0;i<MATCHES.length;i++){if(keyFor(MATCHES[i])===key){m=MATCHES[i];break;}}
+  var m=null;
+  for(var i=0;i<MATCHES.length;i++){if(keyFor(MATCHES[i])===key){m=MATCHES[i];break;}}
   var r=results[key]||{a:'',b:'',sets:[]};
-  editingSets=[];for(var i=0;i<(r.sets||[]).length;i++)editingSets.push({a:r.sets[i].a,b:r.sets[i].b});
-  ge('dTitle').textContent='Turno '+m.turno+' · '+m.sport;
+  editingSets=[];
+  for(var i=0;i<(r.sets||[]).length;i++)editingSets.push({a:r.sets[i].a,b:r.sets[i].b});
+  ge('dTitle').textContent='Turno '+m.turno+' \u00b7 '+m.sport;
   ge('dMeta').innerHTML=ct(m.home)+' - '+ct(m.away);
   ge('lA').innerHTML=ct(m.home); ge('lB').innerHTML=ct(m.away);
   ge('inA').value=(r.a!==''?r.a:''); ge('inB').value=(r.b!==''?r.b:'');
   ge('setsWrap').style.display=m.sport==='pallavolo'?'block':'none';
-  ge('dHint').textContent=(m.sport==='pallavolo'||m.sport==='guerra mondiale')?'Il pareggio non è consentito.':'Il pareggio vale 1 punto a squadra.';
+  ge('dHint').textContent=(m.sport==='pallavolo'||m.sport==='guerra mondiale')?'Il pareggio non \u00e8 consentito.':'Il pareggio vale 1 punto a squadra.';
   if(m.sport==='pallavolo') renderSets();
   ge('backdrop').classList.add('open');
 };
@@ -351,7 +333,7 @@ function renderSets(){
       row.innerHTML='<span class="set-lbl">Set '+(idx+1)+'</span>'+
         '<input type="number" step="1" value="'+(editingSets[idx].a!==''?editingSets[idx].a:'')+'">'+
         '<input type="number" step="1" value="'+(editingSets[idx].b!==''?editingSets[idx].b:'')+'">'+
-        '<button class="set-rm">✕</button>';
+        '<button class="set-rm">\u2715</button>';
       row.querySelectorAll('input')[0].oninput=function(e){editingSets[idx].a=e.target.value;};
       row.querySelectorAll('input')[1].oninput=function(e){editingSets[idx].b=e.target.value;};
       row.querySelector('.set-rm').onclick=function(){editingSets.splice(idx,1);renderSets();};
@@ -373,7 +355,7 @@ ge('btnSave').onclick=function(){
   var an=parseFloat(rawA),bn=parseFloat(rawB);
   if(isNaN(an)||isNaN(bn)){alert('Inserisci valori numerici validi.');return;}
   if(an<0||bn<0){alert('I punteggi non possono essere negativi.');return;}
-  if((m.sport==='pallavolo'||m.sport==='guerra mondiale')&&an===bn){alert('Il pareggio non è consentito in questo sport.');return;}
+  if((m.sport==='pallavolo'||m.sport==='guerra mondiale')&&an===bn){alert('Il pareggio non \u00e8 consentito in questo sport.');return;}
   var sets=[];
   for(var i=0;i<editingSets.length;i++){
     if(editingSets[i].a!==''&&editingSets[i].b!=='')
@@ -392,8 +374,6 @@ document.addEventListener('click',function(e){
 });
 
 window.switchSport = switchSport;
-
-renderCal(); renderStandings();
 </script>
 </body>
 </html>
